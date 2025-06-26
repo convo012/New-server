@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Facebook Auto Messenger</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Facebook Auto Messenger</h1>
+    <form id="msgForm">
+      <label for="psid">Recipient PSID:</label>
+      <input type="text" name="psid" id="psid" placeholder="Enter recipient PSID" required>
+
+      <label for="message">Message:</label>
+      <textarea name="message" id="message" placeholder="Type your message here" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('msgForm');
+    const responseDiv = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const res = await fetch('/send', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      responseDiv.textContent = data.message;
+      responseDiv.className = data.status;
+    });
+  </script>
+</body>
+</html>
